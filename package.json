@@ -1,0 +1,21 @@
+{
+  "name": "boyoz-sistem",
+  "version": "1.0.0",
+  "description": "Boyoz Sistem - çok amaçlı Discord sunucu botu (moderasyon, otomasyon, log, duyuru, eğlence)",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "deploy": "node src/deploy.js",
+    "deploy:temizle": "node src/deploy.js --temizle"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.10",
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.5"
+  }
+}
