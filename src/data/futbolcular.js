@@ -2,7 +2,7 @@
 // n: tam ad, a: kabul edilen cevaplar, c: ülke kodu (flagcdn.com), u: uyruk, p: mevki, s: profesyonel kariyerine başladığı kulüp,
 // y: doğum yılı, d: vefat yılı (varsa), da: vefat yaşı (yıl farkı tutmuyorsa), k: forma giydiği diğer kulüplerden bazıları (sıralı), f: ipucu olarak verilecek bilgi
 // Not: "Şu anki takım" bilgisi bilinçli olarak yok; transferlerle eskiyebilir.
-module.exports = [
+const LIST = [
   // ---------------- Türk futbolcular
   { n: 'Hakan Şükür', a: ['hakan sukur', 'sukur'], c: 'tr', u: 'Türkiye', p: 'Forvet', s: 'Sakaryaspor', y: 1971, k: ['Bursaspor', 'Galatasaray', 'Inter', 'Parma', 'Blackburn Rovers'], f: 'Dünya Kupası tarihinin en hızlı golünü attı (11 saniye, 2002).' },
   { n: 'Rüştü Reçber', a: ['rustu recber', 'rustu'], c: 'tr', u: 'Türkiye', p: 'Kaleci', s: 'Antalyaspor', y: 1973, k: ['Fenerbahçe', 'Barcelona', 'Beşiktaş'], f: '2002 Dünya Kupası\'nda turnuvanın en iyi 11\'ine seçildi.' },
@@ -95,3 +95,18 @@ module.exports = [
   { n: 'Ferenc Puskás', a: ['ferenc puskas', 'puskas'], c: 'hu', u: 'Macaristan', p: 'Forvet', s: 'Kispest Honvéd', y: 1927, d: 2006, k: ['Real Madrid'], f: 'FIFA\'nın yılın en güzel golü ödülü onun adını taşır.' },
   { n: 'Son Heung-min', a: ['son heung min', 'son', 'heung min son'], c: 'kr', u: 'Güney Kore', p: 'Forvet', s: 'Hamburg', y: 1992, k: ['Bayer Leverkusen', 'Tottenham'], f: 'Premier Lig gol krallığını paylaşan ilk Asyalı oyuncu (2021-22).' },
 ];
+
+// Kategoriler: 'eski' = Eski Yıldızlar (futbolu bırakmış), 'karam' = KARAM TAYFA (2000-2008 Milli Takım kuşağı)
+const KARAM = ['Hakan Şükür', 'Rüştü Reçber', 'Emre Belözoğlu', 'Tuncay Şanlı', 'Nihat Kahveci', 'Arda Turan'];
+const ESKI = [
+  ...KARAM, 'Burak Yılmaz', 'Alex de Souza', 'Gheorghe Hagi', 'Didier Drogba', 'Wesley Sneijder', 'Roberto Carlos', 'Robin van Persie',
+  'Mesut Özil', 'Zlatan İbrahimović', 'Thierry Henry', 'Zinedine Zidane', 'Ronaldinho', 'Ronaldo Nazário', 'Kaká', 'Andrés Iniesta',
+  'Xavi Hernández', 'Gerard Piqué', 'Paolo Maldini', 'Andrea Pirlo', 'Gianluigi Buffon', 'Francesco Totti', 'Wayne Rooney', 'David Beckham',
+  'Steven Gerrard', 'Frank Lampard', 'Gareth Bale', 'Ryan Giggs', 'Luís Figo', 'Johan Cruyff', 'Marco van Basten', 'Dennis Bergkamp',
+  'Ruud Gullit', 'Iker Casillas', 'Oliver Kahn', 'Franz Beckenbauer', 'Pelé', 'Diego Maradona', 'Cafu', 'Romário', 'Ferenc Puskás',
+];
+for (const pl of LIST) {
+  pl.t = [...(ESKI.includes(pl.n) ? ['eski'] : []), ...(KARAM.includes(pl.n) ? ['karam'] : [])];
+}
+
+module.exports = [...LIST, ...require('./futbolcular-ek')];

@@ -30,7 +30,7 @@ function birth(p) {
 function hints(p) {
   const words = p.n.split(' ');
   return [
-    { name: '👕 Forma giydiği kulüplerden', value: p.k.length ? p.k.slice(0, 2).join(', ') : 'Tüm kariyerini tek kulüpte geçirdi!' },
+    { name: '👕 Forma giydiği kulüplerden', value: p.k.length ? p.k.slice(0, 2).join(', ') : (p.sk ? 'Kariyerinin büyük bölümünü bu kulüpte geçirdi.' : 'Tüm kariyerini tek kulüpte geçirdi!') },
     { name: '🏆 Bilgi', value: p.f },
     { name: '🔤 Baş harfler', value: `${words.map((w) => `${w[0].toLocaleUpperCase('tr')}.`).join(' ')} (${words.map((w) => [...w].length).join(' + ')} harf)` },
     { name: '🔡 İsim', value: `\`${masked(p.n)}\`` },
@@ -41,12 +41,12 @@ function view(state, end) {
   const { p, level } = state;
   const reward = REWARDS[level];
   const embed = base(end === 'win' ? colors.success : end ? colors.error : 0x2ecc71)
-    .setTitle(end ? `⚽ ${p.n}` : '⚽ Bu futbolcu kim?')
+    .setTitle(end ? `⚽ ${p.n}` : `⚽ Bu futbolcu kim?${state.cat === 'karam' ? ' • 🔥 KARAM TAYFA' : state.cat === 'eski' ? ' • ⭐ ESKİ YILDIZLAR' : ''}`)
     .setThumbnail(`https://flagcdn.com/w160/${p.c}.png`)
     .addFields(
       { name: '🏳️ Uyruk', value: p.u, inline: true },
       { name: '🎯 Mevki', value: p.p, inline: true },
-      { name: '🏟️ Kariyerine başladığı kulüp', value: p.s, inline: true },
+      p.s ? { name: '🏟️ Kariyerine başladığı kulüp', value: p.s, inline: true } : { name: '🏟️ Parladığı kulüp', value: p.sk, inline: true },
       { name: '🎂 Doğum yılı', value: birth(p), inline: true },
       ...hints(p).slice(0, end ? 3 : level),
     );
@@ -69,17 +69,23 @@ module.exports = {
     .setDescription('⚽ Futbolcuyu tahmin et! Bilemedikçe ipuçları artar.')
     .setContexts(InteractionContextType.Guild)
     .addStringOption((o) => o.setName('kategori').setDescription('Hangi futbolcular?').addChoices(
-      { name: '🌍 Karışık', value: 'hepsi' }, { name: '🇹🇷 Türk futbolcular', value: 'tr' }, { name: '⭐ Yabancı yıldızlar', value: 'yabanci' },
+      { name: '🌍 Karışık', value: 'hepsi' }, { name: '🇹🇷 Türk futbolcular', value: 'tr' }, { name: '🌐 Yabancı futbolcular', value: 'yabanci' },
+      { name: '⭐ ESKİ YILDIZLAR', value: 'eski' }, { name: '🔥 KARAM TAYFA (2000-2008 Milli Takım)', value: 'karam' },
     )),
 
   async execute(interaction) {
     const { channel } = interaction;
     if (!games.lockChannel(channel.id, 'Futbolcu Tahmin')) return replyFail(interaction, `Bu kanalda zaten bir oyun var (**${games.channelGame(channel.id)}**).`);
     const cat = interaction.options.getString('kategori') || 'hepsi';
-    const pool = PLAYERS.filter((p) => cat === 'hepsi' || (cat === 'tr' ? p.c === 'tr' : p.c !== 'tr'));
+    const pool = PLAYERS.filter((p) => {
+      if (cat === 'hepsi') return true;
+      if (cat === 'tr') return p.c === 'tr';
+      if (cat === 'yabanci') return p.c !== 'tr';
+      return p.t?.includes(cat);
+    });
     const p = pick(pool);
     const answers = p.a.map(games.norm);
-    const state = { p, level: 0, wrong: 0, starter: interaction.user.id };
+    const state = { p, level: 0, wrong: 0, starter: interaction.user.id, cat };
     let msg;
     try {
       msg = await games.replyMessage(interaction, view(state));
