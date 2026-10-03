@@ -2,6 +2,9 @@ const { Events, ActivityType } = require('discord.js');
 const config = require('../config');
 const db = require('../lib/db');
 const scheduler = require('../lib/scheduler');
+const tiktok = require('../lib/tiktok');
+const voice = require('../lib/voice');
+const { leaveIfForeign } = require('./guilds');
 const { setBotAvatar } = require('../lib/embeds');
 const { deployCommands } = require('../deploy');
 
@@ -32,6 +35,8 @@ module.exports = {
   applyPresence,
   async execute(client) {
     console.log(`🥐 ${client.user.tag} olarak giriş yapıldı • ${client.guilds.cache.size} sunucu • ${client.commands.size} komut`);
+    // Bot sadece GUILD_ID sunucusuna özel: başka sunucudaysa ayrıl
+    for (const guild of client.guilds.cache.values()) await leaveIfForeign(guild);
     setBotAvatar(client.user.displayAvatarURL());
     applyPresence(client);
 
@@ -44,5 +49,7 @@ module.exports = {
       }
     }
     scheduler.start(client);
+    tiktok.start(client);
+    voice.start(client);
   },
 };

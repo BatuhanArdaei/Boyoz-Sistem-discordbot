@@ -3,6 +3,7 @@ const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const db = require('../../lib/db');
 const { base, replyFail, files, urls } = require('../../lib/embeds');
 const { pick, randInt, ts } = require('../../lib/util');
+const { wallet, fmt } = require('../../lib/economy');
 
 const DAY = 864e5;
 const WORK_COOLDOWN = 60 * 60000;
@@ -28,13 +29,6 @@ const EAT = [
   'Çıtır çıtır! 😋', 'Yanına bir de yumurta iyi giderdi. 🥚', 'Kat kat mutluluk! 🧡', 'Çayın yanında efsane oldu. ☕',
   'Ağzının kenarında kırıntı kaldı… 👀', 'Bir boyoz daha mı? Neden olmasın!',
 ];
-
-function wallet(guildId, userId) {
-  const eco = db.guild(guildId).economy;
-  return (eco[userId] ??= { balance: 0, eaten: 0, lastDaily: 0, streak: 0, lastWork: 0 });
-}
-
-const fmt = (n) => `**${n.toLocaleString('tr-TR')}** 🥐`;
 
 module.exports = {
   data: new SlashCommandBuilder()

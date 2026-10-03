@@ -2,14 +2,8 @@
 const { AttachmentBuilder } = require('discord.js');
 const { assets } = require('../config');
 
-let canvasLib = null;
-try {
-  canvasLib = require('@napi-rs/canvas');
-} catch (err) {
-  console.warn('[kart] @napi-rs/canvas yüklenemedi, karşılama kartları kapalı:', err.message);
-}
+const { lib: canvasLib, FONT } = require('./canvas');
 
-const FONT = '"Segoe UI", "Noto Sans", "DejaVu Sans", Arial, sans-serif';
 let bannerImage = null;
 
 async function fetchImage(url) {

@@ -6,11 +6,12 @@ const path = require('node:path');
 
 const CATEGORIES = {
   genel: { label: 'Genel', emoji: '📌', description: 'Bilgi ve yardımcı komutlar' },
-  eglence: { label: 'Eğlence', emoji: '🎉', description: 'Oyunlar, boyoz ekonomisi ve eğlence' },
+  oyunlar: { label: 'Oyunlar', emoji: '🎮', description: 'Yarışmalar, kelime oyunları, kumarhane, PvP, kanal oyunları' },
+  eglence: { label: 'Eğlence', emoji: '🎉', description: 'Boyoz ekonomisi, sosyal GIF\'ler, anket, fal ve daha fazlası' },
   moderasyon: { label: 'Moderasyon', emoji: '🛡️', description: 'Ban, kick, susturma, uyarı, temizleme' },
   otomasyon: { label: 'Otomasyon', emoji: '⚙️', description: 'Hoş geldin, otorol, automod, otocevap, seviye, rol menüsü' },
   log: { label: 'Log', emoji: '📜', description: 'Sunucu kayıt kanalları' },
-  duyuru: { label: 'Duyuru', emoji: '📢', description: 'Duyuru gönderme ve zamanlama' },
+  duyuru: { label: 'Duyuru', emoji: '📢', description: 'Duyuru gönderme, zamanlama ve TikTok yayın bildirimi' },
   ozel: { label: 'Özel', emoji: '👑', description: 'Sadece bot yetkililerinin kullanabildiği komutlar' },
 };
 

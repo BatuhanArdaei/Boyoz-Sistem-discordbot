@@ -2,6 +2,7 @@
 const { SlashCommandBuilder, InteractionContextType } = require('discord.js');
 const { base, replyFail } = require('../../lib/embeds');
 const { pick, randInt } = require('../../lib/util');
+const { FORTUNES } = require('../../data/icerik');
 
 const guildOnly = (b) => b.setContexts(InteractionContextType.Guild);
 
@@ -102,6 +103,15 @@ module.exports = [
       const filled = Math.round(pct / 10);
       const text = pct >= 90 ? 'Ruh ikizi! 💞' : pct >= 70 ? 'Çok uyumlusunuz! 💖' : pct >= 50 ? 'Fena değil, bir boyoz paylaşın. 🥐' : pct >= 25 ? 'Biraz çaba lazım. 🤏' : 'Arkadaş kalalım… 💔';
       await interaction.reply({ embeds: [base(0xeb459e).setTitle('💘 Aşk Ölçer').setDescription(`${a} ❤️ ${b}\n\n${'❤️'.repeat(filled)}${'🖤'.repeat(10 - filled)} **%${pct}**\n\n${text}`)], allowedMentions: { parse: [] } });
+    },
+  },
+  {
+    data: guildOnly(new SlashCommandBuilder().setName('fal').setDescription('☕ Kahve falına bakarım (tamamen eğlence amaçlı!).')),
+    async execute(interaction) {
+      const picks = [...FORTUNES].sort(() => Math.random() - 0.5).slice(0, 3);
+      await interaction.reply({ embeds: [base(0x6f4e37).setTitle('☕ Kahve Falı').setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+        .setDescription(`Fincanını kapattın, soğumasını bekledik... 👀\n\n${picks.map((f) => `• ${f}`).join('\n')}`)
+        .setFooter({ text: 'Fala inanma, falsız da kalma 😄' })] });
     },
   },
   {

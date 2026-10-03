@@ -1,7 +1,7 @@
 // Genel bilgi ve yardımcı komutlar.
 const {
   SlashCommandBuilder, InteractionContextType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle,
-  ChannelType, OAuth2Scopes, PermissionFlagsBits, version: djsVersion,
+  ChannelType, version: djsVersion,
 } = require('discord.js');
 const db = require('../../lib/db');
 const { base, replyOk, replyFail, files, urls } = require('../../lib/embeds');
@@ -81,10 +81,9 @@ module.exports = [
     async execute(interaction, client) {
       const users = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
       const mem = process.memoryUsage().rss / 1024 / 1024;
-      const invite = client.generateInvite({ scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands], permissions: [PermissionFlagsBits.Administrator] });
       const embed = base()
         .setTitle('🥐 Boyoz Sistem')
-        .setDescription('Moderasyon, otomasyon, log, duyuru ve eğlence… hepsi tek bir boyozda. 🧡')
+        .setDescription('Bu sunucuya özel geliştirildi. Moderasyon, otomasyon, log, duyuru, oyunlar… hepsi tek bir boyozda. 🧡')
         .setThumbnail(client.user.displayAvatarURL())
         .setImage(urls.banner)
         .addFields(
@@ -95,8 +94,7 @@ module.exports = [
           { name: '💾 Bellek', value: `${mem.toFixed(1)} MB`, inline: true },
           { name: '⚙️ Altyapı', value: `Node ${process.version} • discord.js v${djsVersion}`, inline: true },
         );
-      const row = new ActionRowBuilder().addComponents(new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel('Sunucuna Ekle').setEmoji('🥐').setURL(invite));
-      await interaction.reply({ embeds: [embed], components: [row], files: [files.banner()] });
+      await interaction.reply({ embeds: [embed], files: [files.banner()] });
     },
   },
 

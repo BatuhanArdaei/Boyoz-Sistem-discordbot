@@ -2,7 +2,9 @@
 
 ![Boyoz Sistem](assets/banner.jpg)
 
-Slash komutlarıyla çalışan, çok amaçlı Discord sunucu botu: **moderasyon, otomasyon, log, duyuru, eğlence** ve sadece yetkili ID'lerin kullanabildiği **özel komutlar**.
+**Boyoz sunucusuna özel**, slash komutlarıyla çalışan çok amaçlı Discord botu: **moderasyon, otomasyon, log, duyuru, TikTok yayın bildirimi, 25+ oyun, eğlence** ve sadece yetkili ID'lerin kullanabildiği **özel komutlar**.
+
+> 🔒 Bot sadece `.env.local`'daki `GUILD_ID` sunucusunda çalışır; başka bir sunucuya eklenirse kendiliğinden ayrılır. Developer Portal → Bot sekmesinde **Public Bot** seçeneğini kapatırsanız kimse davet linki de oluşturamaz.
 
 Node.js + discord.js v14 ile yazıldı. Veriler `data/db.json` dosyasında tutulur, ek bir veritabanı kurmanıza gerek yok.
 
@@ -79,6 +81,7 @@ Her işlem numaralı bir **vaka** olarak kaydedilir, moderasyon log kanalına d�
 | `/otocevap ekle/sil/liste` | Kelimeye otomatik cevap ve/veya tepki |
 | `/seviye-ayar ...` | XP/seviye sistemi ve seviye ödül rolleri |
 | `/rolmenu` | Butonlu veya açılır menülü rol seçme paneli |
+| `/ses-kanali ayarla/ayril/durum` | Bot seçilen ses kanalında **7/24** durur, düşerse kendisi geri bağlanır |
 
 Mesaj değişkenleri: `{kullanici}` `{kullanici_adi}` `{isim}` `{sunucu}` `{uye_sayisi}` `{seviye}` ve `\n`
 
@@ -103,8 +106,28 @@ Mesaj değişkenleri: `{kullanici}` `{kullanici_adi}` `{isim}` `{sunucu}` `{uye_
 
 Seçenekler: @everyone / @here / rol etiketi, renk, görsel URL'si veya Boyoz bannerı, imza, 🥐 tepkisi. Duyuru kanalı tipindeki kanallarda mesaj otomatik yayınlanır.
 
+### 🎵 TikTok yayın bildirimi
+| Komut | Açıklama |
+|---|---|
+| `/tiktok ekle kullanici kanal [rol] [mesaj]` | Hesabı takibe alır, kanala **sürekli duran bir durum kartı** koyar |
+| `/tiktok kontrol` / `/tiktok test` / `/tiktok liste` / `/tiktok sil` | Durumu yenile, etiketsiz önizleme, liste, kaldır |
+
+Kart yayın yokken **⚫ YAYINCI ÇEVRİMDIŞI**, yayın başlayınca **🔴 YAYINCI ÇEVRİMİÇİ** olur ve ayrı bir mesajla seçilen rol etiketlenir. Yayın bitince etiket mesajı silinir, kart çevrimdışına döner. Kontrol ~1,5 dakikada bir yapılır. TikTok'un resmi bir canlı yayın API'si olmadığı için TikTok web sitesinin kullandığı veri okunur; TikTok bunu değiştirirse güncelleme gerekebilir.
+
+### 🎮 Oyunlar
+Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da görünür.
+
+| Tür | Komutlar |
+|---|---|
+| ⚡ Kanal yarışmaları (ilk bilen kazanır) | `/bilgi-yarismasi` (80 soru, butonlu, çok turlu, puan tablosu) · `/bayrak` (84 ülke) · `/emoji-bilmece` · `/matematik` · `/hizli-yaz` (yazı görsel olarak, kopyalanamaz) · `/kelime-coz` · `/sayi-tahmin` (⬆️⬇️ ipuçlu) |
+| 🔤 Kelime | `/kelimebul` (Türkçe Wordle, renkli tahta + klavye görseli) · `/adam-asmaca` (kanalca) |
+| 🎰 Kumarhane (sanal boyoz) | `/blackjack` (kart çek / dur / ikiye katla) · `/rulet` · `/cark` (3 saatte bir ücretsiz şans çarkı) · `/slot` |
+| ⚔️ PvP | `/duello` (saldır, güçlü vuruş, savun, boyoz ye; isteğe bağlı bahis) · `/dort-bagla` · `/xox` · `/tkm` |
+| 🎭 Parti | `/dogruluk-cesaret` · `/hangisi` (canlı oylama) · `/mayin-tarlasi` |
+| 🔁 Sürekli kanal oyunları | `/oyun-kanali ayarla` → **Sayma kanalı** (sırayla say, yanlış yapan sıfırlar) ve **Kelime zinciri** (son harfle devam et) |
+
 ### 🎉 Eğlence
-`/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/xox` (arkadaşına karşı veya bota karşı) · `/tkm` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer` · `/slot`
+`/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/saril` `/tokat` `/op` `/oksa` `/yumruk` `/cak` `/dans` `/agla` (hareketli GIF'ler) · `/hayvan` (kedi, köpek, tilki, ördek fotoğrafları) · `/fal` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer`
 
 ### 📌 Genel
 `/yardim` (kategorili menü) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/siralama` · `/hatirlat`
@@ -142,7 +165,7 @@ Sunucudaki veriler (`data/db.json`) ve token (`.env.local`) güncellemelerden et
 
 ## 📁 Proje yapısı
 ```
-assets/            Boyoz görselleri (kaynak/ altında orijinaller)
+assets/            Boyoz görselleri (kaynak/ altında orijinaller), fonts/ (Poppins, OFL lisanslı)
 src/
   index.js         Giriş noktası
   deploy.js        Slash komut yükleyici

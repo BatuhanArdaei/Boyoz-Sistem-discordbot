@@ -19,6 +19,8 @@ async function deployCommands({ clear = false } = {}) {
   const body = [...loadCommands().values()].map((c) => c.data.toJSON());
   if (config.guildId) {
     await rest.put(Routes.applicationGuildCommands(app.id, config.guildId), { body });
+    // Bot tek sunucuya özel: varsa eski global komutları temizle (çift görünmesinler)
+    await rest.put(Routes.applicationCommands(app.id), { body: [] });
     return { count: body.length, scope: `sunucu (${config.guildId})`, appId: app.id };
   }
   await rest.put(Routes.applicationCommands(app.id), { body });

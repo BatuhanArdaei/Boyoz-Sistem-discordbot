@@ -58,6 +58,13 @@ const guildDefaults = () => ({
   warnings: {},
   economy: {},
   rolemenus: {},
+  tiktok: { accounts: [] },
+  channelGames: {
+    sayma: { channelId: null, current: 0, lastUser: null, record: 0 },
+    kelime: { channelId: null, lastWord: null, lastUser: null, used: [], count: 0, record: 0 },
+  },
+  social: {},
+  voice: { channelId: null },
 });
 
 const rootDefaults = () => ({ guilds: {}, reminders: [], meta: { owners: [], presence: null, scheduleCounter: 0 } });
