@@ -92,6 +92,7 @@ const guildDefaults = () => ({
   rep: {},
   marriages: {},
   quests: {},
+  voiceLocks: {}, // kanalId -> { allowed: [kullanıcıId] }
 });
 
 const rootDefaults = () => ({ guilds: {}, reminders: [], meta: { owners: [], presence: null, scheduleCounter: 0, maintenance: false, disabledCommands: [], blacklist: [] } });

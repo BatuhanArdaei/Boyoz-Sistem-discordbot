@@ -64,6 +64,7 @@ module.exports = {
     stats.start(client);
     community.start(client);
     await rooms.cleanup(client).catch(() => {});
+    await require('../lib/voicelock').sweep(client).catch(() => {});
     for (const guild of client.guilds.cache.values()) await invites.load(guild);
   },
 };

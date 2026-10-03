@@ -64,6 +64,7 @@ Bot açıldıktan sonra Discord'da `/bot-profil hedef: Profil fotoğrafı + bann
 | `/bot durum/guncelle/yeniden-baslat/sunucu-reboot/loglar` | Botu Discord'dan yönet: RAM/CPU/disk, GitHub'dan güncelle, yeniden başlat, Oracle sunucusunu reboot et, hata logları |
 | `/bot bakim/komut/kara-liste` | Bakım modu, komutu herkese kapat/aç, kişiyi botu kullanmaktan engelle |
 | `/bot komutlari-yenile/ses-yenile/yedek` | Kaybolan komutları yeniden yükle, ses bağlantısını sıfırla, veritabanı yedeğini DM'den al |
+| `/ses-kilit ekle/kaldir/izin/liste` | Ses kanalını kilitler: izin listesinde olmayan herkes girer girmez sesten atılır (bot kapalıyken girenler de açılışta atılır) |
 | `/guard` | Sunucu koruması: sağ tık ban/kick, toplu kanal/rol silme, izinsiz bot/webhook, tehlikeli yetki, isim/ikon/URL değişikliği → ceza + geri alma |
 | `/boyoz-yonet ver/al/ayarla/sifirla/toplu-ver/bilgi/herkesi-sifirla` | Boyoz ekonomisine müdahale: puan ver/al, bakiyeyi ayarla, bekleme sürelerini sıfırla, bir role toplu dağıt. Her işlem moderasyon log'una düşer |
 
