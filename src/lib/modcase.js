@@ -18,6 +18,9 @@ const TYPES = {
   purge: { label: 'Mesaj Temizleme', emoji: '🧹', color: colors.info },
   lock: { label: 'Kanal Kilitleme', emoji: '🔒', color: colors.warning },
   unlock: { label: 'Kanal Kilit Açma', emoji: '🔓', color: colors.success },
+  jail: { label: 'Cezalı (Jail)', emoji: '⛓️', color: colors.error },
+  unjail: { label: 'Cezalıdan Çıkarma', emoji: '🔓', color: colors.success },
+  guard: { label: 'Koruma (Guard)', emoji: '🛡️', color: colors.error },
 };
 
 function caseEmbed(c) {
@@ -65,7 +68,40 @@ async function addWarning(guild, userId, modId, reason) {
   const g = db.guild(guild.id);
   (g.warnings[userId] ??= []).push({ id: c.id, modId, reason: reason || null, at: c.at });
   db.save();
-  return { caseId: c.id, total: g.warnings[userId].length };
+  const total = g.warnings[userId].length;
+  await escalate(guild, userId, total).catch((err) => console.warn('[uyarı cezası]', err.message));
+  return { caseId: c.id, total };
+}
+
+// /uyari-ceza kuralı varsa uyarı sayısına göre otomatik ceza uygular
+async function escalate(guild, userId, total) {
+  const rule = db.guild(guild.id).warnPunish.find((r) => r.count === total);
+  if (!rule) return;
+  const member = await guild.members.fetch(userId).catch(() => null);
+  if (!member) return;
+  const me = guild.members.me.id;
+  const reason = `Otomatik: ${total}. uyarıya ulaştı`;
+  if (rule.action === 'sustur' && member.moderatable) {
+    await member.timeout(rule.ms, reason);
+    await createCase(guild, { type: 'timeout', targetId: userId, modId: me, reason, duration: rule.ms });
+  } else if (rule.action === 'at' && member.kickable) {
+    await notifyUser(member.user, guild, 'kick', reason);
+    await member.kick(reason);
+    await createCase(guild, { type: 'kick', targetId: userId, modId: me, reason });
+  } else if (rule.action === 'ban' && member.bannable) {
+    await notifyUser(member.user, guild, 'ban', reason);
+    await member.ban({ reason });
+    await createCase(guild, { type: 'ban', targetId: userId, modId: me, reason });
+  } else if (rule.action === 'jail') {
+    const j = db.guild(guild.id).jail;
+    if (!j.roleId || j.users[userId]) return;
+    const saved = member.roles.cache.filter((r) => r.id !== guild.id && !r.managed && r.editable).map((r) => r.id);
+    j.users[userId] = { roles: saved, until: rule.ms ? Date.now() + rule.ms : null, reason, by: me };
+    db.save();
+    await member.roles.remove(saved, reason).catch(() => {});
+    await member.roles.add(j.roleId, reason).catch(() => {});
+    await createCase(guild, { type: 'jail', targetId: userId, modId: me, reason, duration: rule.ms });
+  }
 }
 
 module.exports = { createCase, caseEmbed, notifyUser, addWarning, TYPES };

@@ -69,6 +69,10 @@ module.exports = [
         .addChannelOption((o) => o.setName('kanal').setDescription('Seviye atlama mesajlarının kanalı (boş = mesajın yazıldığı kanal)').addChannelTypes(ChannelType.GuildText))
         .addStringOption((o) => o.setName('mesaj').setDescription('Mesaj: {kullanici} {seviye} {sunucu}').setMaxLength(500)))
       .addSubcommand((s) => s.setName('kapat').setDescription('Seviye sistemini kapatır'))
+      .addSubcommand((s) => s.setName('boyoz-odulu').setDescription('Seviye atlayınca verilecek boyoz: seviye x miktar (0 = kapalı)')
+        .addIntegerOption((o) => o.setName('miktar').setDescription('Seviye başına boyoz (varsayılan 25)').setRequired(true).setMinValue(0).setMaxValue(10000)))
+      .addSubcommand((s) => s.setName('ses-xp').setDescription('Seste geçirilen süre XP kazandırsın mı?')
+        .addBooleanOption((o) => o.setName('aktif').setDescription('Açık/kapalı').setRequired(true)))
       .addSubcommand((s) => s.setName('odul-ekle').setDescription('Seviyeye ulaşınca verilecek rol')
         .addIntegerOption((o) => o.setName('seviye').setDescription('Seviye').setRequired(true).setMinValue(1).setMaxValue(500))
         .addRoleOption((o) => o.setName('rol').setDescription('Rol').setRequired(true)))
@@ -94,6 +98,12 @@ module.exports = [
         case 'kapat':
           cfg.enabled = false; db.save();
           return replyOk(interaction, 'Seviye sistemi kapatıldı (XP verileri korunuyor).');
+        case 'boyoz-odulu':
+          cfg.boyozPerLevel = interaction.options.getInteger('miktar'); db.save();
+          return replyOk(interaction, cfg.boyozPerLevel ? `Seviye atlayan üyeler **seviye × ${cfg.boyozPerLevel}** boyoz kazanacak (ör. 10. seviye = ${cfg.boyozPerLevel * 10} 🥐).` : 'Seviye boyoz ödülü kapatıldı.');
+        case 'ses-xp':
+          cfg.voiceXp = interaction.options.getBoolean('aktif'); db.save();
+          return replyOk(interaction, cfg.voiceXp ? 'Seste geçirilen her dakika XP kazandıracak (yalnız, susturulmuş veya AFK kanalındakiler hariç).' : 'Ses XP\'si kapatıldı.');
         case 'odul-ekle': {
           const level = interaction.options.getInteger('seviye');
           const role = interaction.options.getRole('rol');
@@ -121,6 +131,8 @@ module.exports = [
             { name: 'Durum', value: cfg.enabled ? '🟢 Açık' : '🔴 Kapalı', inline: true },
             { name: 'Kanal', value: cfg.channel ? `<#${cfg.channel}>` : 'Mesajın yazıldığı kanal', inline: true },
             { name: 'Kayıtlı üye', value: String(Object.keys(cfg.users).length), inline: true },
+            { name: 'Seviye başına boyoz', value: cfg.boyozPerLevel ? `seviye × ${cfg.boyozPerLevel} 🥐` : 'Kapalı', inline: true },
+            { name: 'Ses XP', value: cfg.voiceXp ? '✅ Açık' : '❌ Kapalı', inline: true },
             { name: 'Mesaj', value: cfg.message },
             { name: 'Ödüller', value: cfg.rewards.map((r) => `Seviye **${r.level}** → <@&${r.roleId}>`).join('\n') || '—' },
           ));

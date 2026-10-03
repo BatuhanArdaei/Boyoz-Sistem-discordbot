@@ -5,6 +5,8 @@ const automod = require('../lib/automod');
 const levels = require('../lib/levels');
 const channelGames = require('../lib/channelgames');
 const afk = require('../lib/afk');
+const stats = require('../lib/stats');
+const community = require('../lib/community');
 const { fillTemplate } = require('../lib/util');
 
 const autoresponseCooldown = new Map();
@@ -33,6 +35,8 @@ module.exports = {
   async execute(message) {
     if (!message.guild || message.author.bot || message.webhookId) return;
     await afk.handleMessage(message);
+    stats.onMessage(message);
+    community.onMessage(message);
     if (await automod.handle(message)) return;
     // Sayma / kelime zinciri kanallarında otomatik cevap çalışmasın
     if (await channelGames.handle(message)) { await levels.handle(message); return; }

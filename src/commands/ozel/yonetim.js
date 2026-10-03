@@ -203,3 +203,16 @@ module.exports = [
     },
   },
 ];
+
+// /ozel dm|durum|profil|sunucular|yetkili ...
+const { regroup } = require('../../lib/group');
+
+module.exports = regroup(module.exports, [
+  {
+    name: 'ozel', description: '👑 Yetkili araçları: DM, bot durumu, profil, sunucular, yetkili listesi.', perm: PermissionFlagsBits.Administrator,
+    parts: [
+      { sub: 'dm', from: 'dm' }, { sub: 'durum', from: 'durum' }, { sub: 'profil', from: 'bot-profil' },
+      { sub: 'sunucular', from: 'sunucular' }, { sub: 'yetkili', from: 'yetkili' },
+    ],
+  },
+]);

@@ -4,6 +4,9 @@ const db = require('../lib/db');
 const { base, files, urls } = require('../lib/embeds');
 const { buildWelcome, buildGoodbye } = require('../lib/welcome');
 const { sendLog } = require('../lib/logger');
+const invites = require('../lib/invites');
+const memberHooks = require('../lib/memberhooks');
+const guard = require('../lib/guard');
 const { fillTemplate, ts, formatDuration } = require('../lib/util');
 const { colors } = require('../config');
 
@@ -18,10 +21,14 @@ module.exports = [
     name: Events.GuildMemberAdd,
     async execute(member) {
       const g = db.guild(member.guild.id);
+      await guard.onBotAdd(member).catch(() => {});
+      const inv = await invites.onJoin(member).catch(() => null);
+      // Jail kaçağı, kayıt sistemi vb. (true dönerse otorol/karşılama atlanır)
+      const handled = await memberHooks.onJoin(member).catch((err) => { console.warn('[üye]', err.message); return false; });
 
       // Otorol
       const roleIds = member.user.bot ? g.autorole.bot : g.autorole.human;
-      const roles = roleIds.filter((id) => member.guild.roles.cache.get(id)?.editable);
+      const roles = handled ? [] : roleIds.filter((id) => member.guild.roles.cache.get(id)?.editable);
       if (roles.length) await member.roles.add(roles, 'Otorol').catch((err) => console.warn('[otorol]', err.message));
 
       // Karşılama
@@ -45,6 +52,9 @@ module.exports = [
           { name: 'Üye Sayısı', value: String(member.guild.memberCount), inline: true },
         );
       if (age < 7 * 864e5) embed.addFields({ name: '⚠️ Uyarı', value: `Yeni hesap! (${formatDuration(age)} önce açılmış)` });
+      if (inv) {
+        embed.addFields({ name: '📨 Davet eden', value: inv.inviterId ? `<@${inv.inviterId}> (\`${inv.code}\`) • toplam **${inv.total}** davet${inv.fake ? ' • ⚠️ sahte sayıldı' : ''}` : inv.vanity ? 'Özel URL' : 'Bulunamadı' });
+      }
       await sendLog(member.guild, 'uye', embed);
     },
   },
@@ -52,6 +62,8 @@ module.exports = [
     name: Events.GuildMemberRemove,
     async execute(member) {
       const g = db.guild(member.guild.id);
+      const inviterId = invites.onLeave(member);
+      guard.onKick(member).catch(() => {});
       if (g.goodbye.enabled && g.goodbye.channel) {
         const channel = member.guild.channels.cache.get(g.goodbye.channel);
         if (channel?.isTextBased()) await channel.send(buildGoodbye(member)).catch(() => {});
@@ -69,6 +81,7 @@ module.exports = [
           { name: 'Roller', value: roles.slice(0, 1024) },
         );
       if (kick) embed.addFields({ name: 'Atan', value: `${kick.executor}`, inline: true }, { name: 'Sebep', value: kick.reason || 'Belirtilmedi', inline: true });
+      if (inviterId) embed.addFields({ name: '📨 Davet eden', value: `<@${inviterId}>`, inline: true });
       await sendLog(member.guild, 'uye', embed);
     },
   },

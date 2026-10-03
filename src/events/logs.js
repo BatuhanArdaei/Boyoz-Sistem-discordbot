@@ -21,6 +21,7 @@ module.exports = [
   {
     name: Events.MessageDelete,
     async execute(message) {
+      require('../lib/snipe').add(message);
       if (!message.guild || message.author?.bot) return;
       const embed = base(colors.error).setTitle('🗑️ Mesaj Silindi').addFields(
         { name: 'Kanal', value: `${message.channel}`, inline: true },
@@ -217,6 +218,7 @@ module.exports = [
     name: Events.InviteCreate,
     async execute(invite) {
       if (!invite.guild) return;
+      require('../lib/invites').onInviteCreate(invite);
       await sendLog(invite.guild, 'sunucu', base(colors.info).setTitle('🔗 Davet Oluşturuldu').addFields(
         { name: 'Kod', value: `\`${invite.code}\``, inline: true },
         { name: 'Kanal', value: `${invite.channel}`, inline: true },

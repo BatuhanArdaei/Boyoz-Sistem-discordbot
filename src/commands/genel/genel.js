@@ -298,18 +298,6 @@ module.exports = [
     },
   },
 
-  // ---------------------------------------------------------------- /siralama
-  {
-    data: guildOnly(new SlashCommandBuilder().setName('siralama').setDescription('🏆 Sunucunun seviye sıralamasını gösterir.')),
-    async execute(interaction) {
-      const list = levels.ranking(interaction.guild.id).slice(0, 10);
-      if (!list.length) return replyFail(interaction, 'Henüz kimse XP kazanmamış.');
-      const medals = ['🥇', '🥈', '🥉'];
-      const lines = list.map((u, i) => `${medals[i] || `**${i + 1}.**`} <@${u.id}> • Seviye **${levels.levelFromXp(u.xp).level}** • ${u.xp} XP`);
-      await interaction.reply({ embeds: [base().setTitle(`🏆 ${interaction.guild.name} • Seviye Sıralaması`).setDescription(lines.join('\n')).setThumbnail(interaction.guild.iconURL())], allowedMentions: { parse: [] } });
-    },
-  },
-
   // ---------------------------------------------------------------- /hatirlat
   {
     data: guildOnly(new SlashCommandBuilder().setName('hatirlat').setDescription('⏰ Belirttiğin süre sonra sana hatırlatma yapar.'))

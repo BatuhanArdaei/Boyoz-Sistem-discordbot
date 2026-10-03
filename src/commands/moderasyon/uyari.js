@@ -103,3 +103,21 @@ module.exports = [
     },
   },
 ];
+
+// Discord'un 100 komut sınırı için alt komutlara birleştirilir: /uyari ver|liste|sil|ceza, /sicil kullanici|vaka
+const { regroup } = require('../../lib/group');
+const { ceza } = require('./ekstra');
+
+module.exports = regroup(module.exports, [
+  {
+    name: 'uyari', description: '⚠️ Uyarı sistemi: uyar, listele, sil, otomatik cezalar.', perm: PermissionFlagsBits.ModerateMembers,
+    parts: [
+      { sub: 'ver', from: 'uyar' }, { sub: 'liste', from: 'uyarilar' }, { sub: 'sil', from: 'uyari-sil' },
+      { sub: 'ceza', from: 'uyari-ceza', cmd: ceza, perm: PermissionFlagsBits.ManageGuild },
+    ],
+  },
+  {
+    name: 'sicil', description: '📁 Moderasyon geçmişi ve vaka detayları.', perm: PermissionFlagsBits.ModerateMembers,
+    parts: [{ sub: 'kullanici', from: 'sicil' }, { sub: 'vaka', from: 'vaka' }],
+  },
+]);

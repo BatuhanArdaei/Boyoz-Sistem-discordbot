@@ -4,6 +4,10 @@ const db = require('../lib/db');
 const scheduler = require('../lib/scheduler');
 const tiktok = require('../lib/tiktok');
 const voice = require('../lib/voice');
+const stats = require('../lib/stats');
+const invites = require('../lib/invites');
+const community = require('../lib/community');
+const rooms = require('../lib/rooms');
 const { leaveIfForeign } = require('./guilds');
 const { setBotAvatar } = require('../lib/embeds');
 const { deployCommands } = require('../deploy');
@@ -49,7 +53,17 @@ module.exports = {
       }
     }
     scheduler.start(client);
+    // Bekçi: Discord bağlantısı 5 dakikadan uzun süre hazır değilse çık (PM2 yeniden başlatır)
+    let badChecks = 0;
+    setInterval(() => {
+      badChecks = client.ws.status === 0 ? 0 : badChecks + 1;
+      if (badChecks >= 5) { console.error('[bekçi] Discord bağlantısı 5 dakikadır yok, yeniden başlatılıyor.'); db.flush(); process.exit(1); }
+    }, 60000).unref();
     tiktok.start(client);
     voice.start(client);
+    stats.start(client);
+    community.start(client);
+    await rooms.cleanup(client).catch(() => {});
+    for (const guild of client.guilds.cache.values()) await invites.load(guild);
   },
 };

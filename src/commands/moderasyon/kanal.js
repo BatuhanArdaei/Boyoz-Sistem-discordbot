@@ -146,3 +146,12 @@ module.exports = [
     },
   },
 ];
+
+const { regroup } = require('../../lib/group');
+
+module.exports = regroup(module.exports, [
+  {
+    name: 'kilit', description: '🔒 Kanalı kilitler veya kilidini açar.', perm: PermissionFlagsBits.ManageChannels,
+    parts: [{ sub: 'kapat', from: 'kilitle' }, { sub: 'ac', from: 'kilit-ac' }],
+  },
+]);

@@ -59,8 +59,13 @@ const ANIMALS = {
   ordek: { label: '🦆 Ördek', fetch: async () => (await getJson('https://random-d.uk/api/v2/random')).url.replace(/^http:/, 'https:'), lines: ['Vak vak! 🦆', 'Ördek gözetimi altındasın.'] },
 };
 
+const { group } = require('../../lib/group');
+
 module.exports = [
-  ...Object.entries(ACTIONS).map(([name, a]) => buildAction(name, a)),
+  group({
+    name: 'etkilesim', description: '🤗 Sarıl, tokat at, öp, okşa, dans et... (hareketli GIF ile)',
+    parts: Object.entries(ACTIONS).map(([name, a]) => ({ sub: name, cmd: buildAction(name, a) })),
+  }),
   {
     data: new SlashCommandBuilder().setName('hayvan').setDescription('🐾 Rastgele sevimli hayvan fotoğrafı.').setContexts(InteractionContextType.Guild)
       .addStringOption((o) => o.setName('tur').setDescription('Hangi hayvan? (boş = rastgele)').addChoices(...Object.entries(ANIMALS).map(([value, x]) => ({ name: x.label, value })))),

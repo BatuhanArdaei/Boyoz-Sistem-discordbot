@@ -38,6 +38,27 @@ async function tick(client) {
         if (!poll.ended && poll.endsAt && poll.endsAt <= now) await endPoll(client, guildId, messageId);
       }
 
+      // Süreli roller
+      const roleDue = (g.tempRoles || []).filter((t) => t.until <= now);
+      if (roleDue.length) {
+        g.tempRoles = g.tempRoles.filter((t) => t.until > now);
+        db.save();
+        for (const t of roleDue) {
+          const m = await guild.members.fetch(t.userId).catch(() => null);
+          await m?.roles.remove(t.roleId, 'Süreli rolün süresi doldu').catch(() => {});
+        }
+      }
+
+      // Süreli jail
+      for (const [userId, j] of Object.entries(g.jail?.users || {})) {
+        if (j.until && j.until <= now) await require('../commands/moderasyon/ekstra').release(guild, userId, client.user.id, 'Jail süresi doldu (otomatik)');
+      }
+
+      // Çekilişler
+      for (const [messageId, gw] of Object.entries(g.giveaways || {})) {
+        if (!gw.ended && gw.endsAt <= now) await require('./giveaways').end(client, guildId, messageId).catch((e) => console.warn('[çekiliş]', e.message));
+      }
+
       // Süreli banlar
       const expired = (g.tempbans || []).filter((b) => b.until <= now);
       if (expired.length) {

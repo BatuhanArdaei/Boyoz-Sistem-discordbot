@@ -21,8 +21,10 @@ const client = new Client({
     GatewayIntentBits.GuildModeration,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildInvites,
+    GatewayIntentBits.GuildMessageReactions, // Boyozboard
+    GatewayIntentBits.GuildWebhooks, // guard: webhook koruması
   ],
-  partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.User],
+  partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.User, Partials.Reaction],
   allowedMentions: { parse: ['users'], repliedUser: false },
 });
 

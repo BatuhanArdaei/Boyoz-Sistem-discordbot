@@ -59,17 +59,20 @@ Bot açıldıktan sonra Discord'da `/bot-profil hedef: Profil fotoğrafı + bann
 | `/embed-yaz [kanal] [renk] [gorsel] ...` | Formdan şık embed mesaj gönderir |
 | `/mesaj-duzenle mesaj` | Botun gönderdiği mesajı düzenler |
 | `/tepki mesaj emojiler` | Bot adına tepki bırakır |
-| `/dm kullanici metin` | Bot üzerinden DM atar |
-| `/durum tur metin [statu]` | Botun durumunu değiştirir (kalıcı) |
-| `/yetkili ekle/cikar/liste` | Özel komut yetkililerini yönetir |
-| `/bot-profil` | Profil fotoğrafı / banner ayarlar |
-| `/sunucular [ayril]` | Sunucuları listeler / sunucudan ayrılır |
+| `/ozel dm` · `/ozel durum` · `/ozel profil` · `/ozel sunucular` | DM at, botun durumunu değiştir, profil fotoğrafı/banner, sunucu listesi |
+| `/ozel yetkili ekle/cikar/liste` | Özel komut yetkililerini yönetir |
+| `/bot durum/guncelle/yeniden-baslat/sunucu-reboot/loglar` | Botu Discord'dan yönet: RAM/CPU/disk, GitHub'dan güncelle, yeniden başlat, Oracle sunucusunu reboot et, hata logları |
+| `/bot bakim/komut/kara-liste` | Bakım modu, komutu herkese kapat/aç, kişiyi botu kullanmaktan engelle |
+| `/bot komutlari-yenile/ses-yenile/yedek` | Kaybolan komutları yeniden yükle, ses bağlantısını sıfırla, veritabanı yedeğini DM'den al |
+| `/guard` | Sunucu koruması: sağ tık ban/kick, toplu kanal/rol silme, izinsiz bot/webhook, tehlikeli yetki, isim/ikon/URL değişikliği → ceza + geri alma |
 | `/boyoz-yonet ver/al/ayarla/sifirla/toplu-ver/bilgi/herkesi-sifirla` | Boyoz ekonomisine müdahale: puan ver/al, bakiyeyi ayarla, bekleme sürelerini sıfırla, bir role toplu dağıt. Her işlem moderasyon log'una düşer |
 
 > Bu komutlar varsayılan olarak sadece **Yönetici** izni olanlara görünür. Yönetici olmayan bir yetkilinin görmesi için: *Sunucu Ayarları → Entegrasyonlar → Boyoz Sistem* üzerinden izin verin. Görünse bile ID'si tanımlı olmayan kimse kullanamaz.
 
 ### 🛡️ Moderasyon
-`/ban` (süreli ban destekli) · `/unban` (yasaklılar arasında arama) · `/kick` · `/sustur` · `/susturma-kaldir` · `/uyar` · `/uyarilar` · `/uyari-sil` · `/sicil` · `/vaka` · `/temizle` (kullanıcı/bot/link/ek filtreli) · `/yavasmod` · `/kilitle` · `/kilit-ac` · `/rol ver/al` · `/takmaad`
+`/ban` (süreli ban destekli) · `/unban` · `/kick` · `/sustur` · `/susturma-kaldir` · `/uyari ver/liste/sil` · `/uyari ceza` (ör. 3 uyarı = otomatik susturma/jail/kick/ban) · `/sicil kullanici/vaka` · `/jail ver/kaldir/ayar` (roller saklanır, süreli, çıkıp girerek kaçılamaz) · `/temizle` · `/snipe` · `/yavasmod` · `/kilit kapat/ac` · `/rol ver/al` · `/toplu-rol` · `/sureli-rol` · `/takmaad`
+
+**Kayıt sistemi:** `/kayit yap` (isim, yaş, erkek/kız rolleri, `{isim} | {yas}` formatı) · `/kayit kayitsiz` · `/kayit isimler` (isim geçmişi) · `/kayit stat` (yetkili kayıt sayıları) · `/kayit-ayar` (roller, kanal, format, min. yaş, **şüpheli hesap karantinası**). Sistem açıkken yeni gelenler kayıtsız rolüyle girer, yetkili rolü etiketlenir; kayıt yapan yetkili boyoz kazanır.
 
 Her işlem numaralı bir **vaka** olarak kaydedilir, moderasyon log kanalına düşer ve kullanıcıya DM ile bildirilir.
 
@@ -80,8 +83,11 @@ Her işlem numaralı bir **vaka** olarak kaydedilir, moderasyon log kanalına d�
 | `/otorol ekle/cikar/liste` | Katılan insanlara/botlara otomatik rol |
 | `/automod ...` | Davet, link, küfür, büyük harf, spam, toplu etiket filtreleri; ceza: sil / uyar / sustur; muaf rol-kanal; izinli linkler |
 | `/otocevap ekle/sil/liste` | Kelimeye otomatik cevap ve/veya tepki |
-| `/seviye-ayar ...` | XP/seviye sistemi ve seviye ödül rolleri |
+| `/seviye-ayar ...` | XP/seviye sistemi, seviye ödül rolleri, **seviye başına boyoz hediyesi**, **ses XP'si** |
 | `/rolmenu` | Butonlu veya açılır menülü rol seçme paneli |
+| `/ozel-oda kur` | "➕ Oda Oluştur" kanalına girene kişisel ses odası; butonlarla kilitle, gizle, limit, isim, izin ver, at, sahipliği devral |
+| `/ticket kur` | "Talep Aç" paneli: kişiye özel destek kanalı, sahiplenme, kapatınca .txt dökümü log'a ve kişiye |
+| `/sayac kur` | 👥 Üye / 🔊 Seste / 🚀 Boost sayaç kanalları |
 | `/ses-kanali ayarla/ayril/durum` | Bot seçilen ses kanalında **7/24** durur, düşerse kendisi geri bağlanır |
 
 Mesaj değişkenleri: `{kullanici}` `{kullanici_adi}` `{isim}` `{sunucu}` `{uye_sayisi}` `{seviye}` ve `\n`
@@ -115,6 +121,22 @@ Seçenekler: @everyone / @here / rol etiketi, renk, görsel URL'si veya Boyoz ba
 
 Kart yayın yokken **⚫ YAYINCI ÇEVRİMDIŞI**, yayın başlayınca **🔴 YAYINCI ÇEVRİMİÇİ** olur ve ayrı bir mesajla seçilen rol etiketlenir. Yayın bitince etiket mesajı silinir, kart çevrimdışına döner. Kontrol ~1,5 dakikada bir yapılır. TikTok'un resmi bir canlı yayın API'si olmadığı için TikTok web sitesinin kullandığı veri okunur; TikTok bunu değiştirirse güncelleme gerekebilir.
 
+### 🥐 Boyoz ekonomisi ve topluluk
+Her şey boyoz kazandırır: seviye atlama (seviye × 25), seste vakit geçirme (her 10 dk), gerçek davet (+50), kabul edilen öneri (+75), Boyozboard'a girmek (+25), doğum günü hediyesi, çekiliş ödülleri, günlük görevler (+200), kayıt yapan yetkili, teşekkür alan kişi…
+
+| Komut | Açıklama |
+|---|---|
+| `/market ac` · `/market yonet` | Boyozla rol satın al (kalıcı/süreli, stoklu); hazır ürünler: ekstra çark hakkı, XP iksiri |
+| `/cekilis baslat/bitir/yeniden-cek/liste` | Butonlu çekiliş; rol şartı, kazananlara otomatik boyoz |
+| `/gorev` | Günlük görevler: 30 mesaj, 30 dk ses, 2 oyun galibiyeti → 200 🥐 |
+| `/stat` · `/top` | Ses süresi, mesaj, yayın; bugün/hafta/ay/toplam; ses, mesaj, davet, seviye, boyoz sıralamaları |
+| `/davet bilgi/bonus` | Davet takibi: gerçek / sahte (7 günden yeni hesap) / ayrılan / bonus |
+| `/oneri yaz/kanal` | Oylamalı öneriler, yetkili kabul/red (+not), her öneriye tartışma başlığı |
+| `/dogumgunu ayarla/liste/sistem` | Her sabah 09:00 kutlama, 24 saatlik rol, hediye boyoz |
+| `/boyozboard` | Belirli sayıda 🥐 tepkisi alan mesajlar onur kanalına (starboard) |
+| `/itiraf yaz/kanal` | Anonim itiraflar (kötüye kullanıma karşı gönderen sadece mod log'una yazılır) |
+| `/tesekkur` · `/evlen` · `/sabit-mesaj` · `/afk` | Rep puanı (+10 🥐), evlilik (500 🥐 yüzük), kanalın en altında duran mesaj, AFK |
+
 ### 🎮 Oyunlar
 Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da görünür.
 
@@ -128,10 +150,10 @@ Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da 
 | 🔁 Sürekli kanal oyunları | `/oyun-kanali ayarla` → **Sayma kanalı** (sırayla say, yanlış yapan sıfırlar) ve **Kelime zinciri** (son harfle devam et) |
 
 ### 🎉 Eğlence
-`/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/saril` `/tokat` `/op` `/oksa` `/yumruk` `/cak` `/dans` `/agla` (hareketli GIF'ler) · `/hayvan` (kedi, köpek, tilki, ördek fotoğrafları) · `/fal` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer`
+`/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/etkilesim saril/tokat/op/oksa/yumruk/cak/dans/agla` (hareketli GIF'ler) · `/hayvan` (kedi, köpek, tilki, ördek fotoğrafları) · `/fal` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer`
 
 ### 📌 Genel
-`/yardim` (kategori → komut seçmeli menü, komut detay sayfaları) · `/afk` (sebepli; etiketleyenlere bildirir, takma ada [AFK] ekler, yazınca veya seste hareket edince kalkar) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/siralama` · `/hatirlat`
+`/yardim` (kategori → komut seçmeli menü, komut detay sayfaları) · `/afk` (sebepli; etiketleyenlere bildirir, takma ada [AFK] ekler, yazınca veya seste hareket edince kalkar) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/stat` · `/top` · `/hatirlat`
 
 ---
 

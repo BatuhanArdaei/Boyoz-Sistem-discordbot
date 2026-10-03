@@ -47,6 +47,8 @@ const guildDefaults = () => ({
     enabled: false,
     channel: null,
     message: '🎉 Tebrikler {kullanici}, **{seviye}**. seviyeye ulaştın!',
+    boyozPerLevel: 25, // seviye atlayınca: seviye x bu kadar boyoz
+    voiceXp: true, // seste geçirilen süre de XP kazandırır
     rewards: [],
     users: {},
   },
@@ -66,9 +68,33 @@ const guildDefaults = () => ({
   social: {},
   voice: { channelId: null },
   afk: {},
+  giveaways: {},
+  market: { items: [], counter: 0 },
+  tempRoles: [],
+  stats: { users: {}, weekStart: 0 },
+  invites: { users: {}, joins: {} },
+  rooms: { hubId: null, categoryId: null, active: {} },
+  starboard: { channelId: null, threshold: 3, emoji: '🥐', posts: {} },
+  suggestions: { channelId: null, count: 0, items: {} },
+  birthdays: { channelId: null, roleId: null, gift: 100, users: {}, lastRun: null, active: [] },
+  warnPunish: [],
+  counters: { member: null, voice: null, boost: null },
+  tickets: { categoryId: null, staffRoleId: null, logChannelId: null, count: 0, open: {} },
+  jail: { roleId: null, users: {} },
+  kayit: {
+    enabled: false, channelId: null, staffRoleId: null, unregRoleId: null, suspiciousRoleId: null, suspiciousDays: 7,
+    maleRoles: [], femaleRoles: [], memberRoles: [], nameFormat: '{isim} | {yas}', minAge: 0, reward: 10,
+    stats: {}, history: {},
+  },
+  guard: { enabled: false, whitelist: [], limit: 3, windowSec: 60, punish: 'roller', logChannelId: null },
+  sticky: {},
+  confessions: { channelId: null, count: 0 },
+  rep: {},
+  marriages: {},
+  quests: {},
 });
 
-const rootDefaults = () => ({ guilds: {}, reminders: [], meta: { owners: [], presence: null, scheduleCounter: 0 } });
+const rootDefaults = () => ({ guilds: {}, reminders: [], meta: { owners: [], presence: null, scheduleCounter: 0, maintenance: false, disabledCommands: [], blacklist: [] } });
 
 function isPlainObject(v) {
   return v && typeof v === 'object' && !Array.isArray(v);
