@@ -16,7 +16,12 @@ if not exist node_modules (
 )
 
 if not exist .env.local (
-  copy .env.example .env.local >nul
+  (
+    echo DISCORD_TOKEN=
+    echo OWNER_IDS=
+    echo GUILD_ID=
+    echo AUTO_DEPLOY=true
+  ) > .env.local
   echo .env.local dosyasi olusturuldu. Token ve OWNER_IDS bilgilerini girip kaydedin, sonra bu dosyayi tekrar calistirin.
   notepad .env.local
   pause

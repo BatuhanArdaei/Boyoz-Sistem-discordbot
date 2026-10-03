@@ -5,7 +5,7 @@ const config = require('./config');
 const { loadCommands } = require('./lib/registry');
 
 if (!config.token) {
-  console.error('❌ DISCORD_TOKEN bulunamadı. Proje kökünde .env.local dosyası oluşturup token\'ı girin (.env.example\'a bakın).');
+  console.error('❌ DISCORD_TOKEN bulunamadı. Proje kökünde .env.local dosyası oluşturup token\'ı girin (README > Kurulum).');
   process.exit(1);
 }
 if (!config.ownerIds.length) {

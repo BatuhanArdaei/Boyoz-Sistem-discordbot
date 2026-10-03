@@ -19,7 +19,7 @@ Node.js + discord.js v14 ile yazıldı. Veriler `data/db.json` dosyasında tutul
 4. **OAuth2 → URL Generator** → Scopes: `bot` + `applications.commands`, Bot Permissions: `Administrator` → çıkan linkle botu sunucunuza ekleyin.
 
 ### 2. Ayar dosyası
-`.env.example` dosyasını `.env.local` adıyla kopyalayıp doldurun:
+Proje klasöründe **`.env.local`** adında bir dosya oluşturun (`baslat.bat` ilk çalıştırmada kendisi oluşturur) ve doldurun:
 
 ```env
 DISCORD_TOKEN=bot_tokeniniz
@@ -27,6 +27,8 @@ OWNER_IDS=sizin_discord_id,arkadasinizin_id
 GUILD_ID=sunucu_id        # opsiyonel: komutlar bu sunucuda anında görünür
 AUTO_DEPLOY=true
 ```
+
+> ⚠️ Token'ı **sadece `.env.local`** içine yazın. Bu dosya `.gitignore`'da olduğu için GitHub'a gitmez. Token'ı başka hiçbir dosyaya yazmayın.
 
 > Discord ID'yi almak için: Ayarlar → Gelişmiş → **Geliştirici Modu**'nu açın, sonra kullanıcıya/sunucuya sağ tıklayıp **ID'yi Kopyala**.
 
@@ -108,6 +110,29 @@ Seçenekler: @everyone / @here / rol etiketi, renk, görsel URL'si veya Boyoz ba
 `/yardim` (kategorili menü) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/siralama` · `/hatirlat`
 
 ---
+
+## ☁️ Sunucuda 7/24 çalıştırma ve güncelleme
+Bot bir Ubuntu sunucuda (ör. Oracle Cloud Always Free) PM2 ile çalışır. İlk kurulum, sunucunun içinde:
+```bash
+git clone https://github.com/BatuhanArdaei/Boyoz-Sistem-discordbot.git
+cd Boyoz-Sistem-discordbot
+bash kurulum.sh
+```
+
+**Yenilik getirdiğinizde:**
+1. Değişikliği bilgisayarınızda yapın, commit'leyip GitHub'a push'layın.
+2. `guncelle.bat` dosyasına çift tıklayın. Sunucuya bağlanıp son sürümü çeker, paketleri günceller ve botu yeniden başlatır.
+
+Elle yapmak isterseniz: `ssh boyoz` → `cd Boyoz-Sistem-discordbot && git pull && npm ci --omit=dev && pm2 restart boyoz`
+
+Sunucudaki veriler (`data/db.json`) ve token (`.env.local`) güncellemelerden etkilenmez.
+
+| Sunucuda işe yarar komutlar | |
+|---|---|
+| `pm2 logs boyoz` | Canlı loglar |
+| `pm2 status` | Bot çalışıyor mu? |
+| `pm2 restart boyoz` | Yeniden başlat |
+| `pm2 stop boyoz` | Durdur |
 
 ## ⚠️ Önemli notlar
 - **Botun rolü**, yöneteceği rollerin (otorol, rol menüsü, susturulacak kişiler) **üstünde** olmalı. *Sunucu Ayarları → Roller*'den Boyoz Sistem rolünü yukarı sürükleyin.
