@@ -143,6 +143,7 @@ Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da 
 | Tür | Komutlar |
 |---|---|
 | ⚡ Kanal yarışmaları (ilk bilen kazanır) | `/bilgi-yarismasi` (80 soru, butonlu, çok turlu, puan tablosu) · `/bayrak` (84 ülke) · `/emoji-bilmece` · `/matematik` · `/hizli-yaz` (yazı görsel olarak, kopyalanamaz) · `/kelime-coz` · `/sayi-tahmin` (⬆️⬇️ ipuçlu) |
+| ⚽ Futbolcu tahmin | `/futbolcu` (86 futbolcu, Türk / yabancı / karışık): bayrak + mevki + ilk kulüple başlar; her 3 yanlışta ve 25 sn'de bir yeni ipucu (doğum yılı, kulüpler, başarı, baş harfler, kısmi isim); İpucu ve Pes Et butonları; az ipucuyla bilen çok boyoz kazanır |
 | 🔤 Kelime | `/kelimebul` (Türkçe Wordle, renkli tahta + klavye görseli) · `/adam-asmaca` (kanalca) |
 | 🎰 Kumarhane (sanal boyoz) | `/blackjack` (kart çek / dur / ikiye katla) · `/rulet` · `/cark` (3 saatte bir ücretsiz şans çarkı) · `/slot` |
 | ⚔️ PvP | `/duello` (saldır, güçlü vuruş, savun, boyoz ye; isteğe bağlı bahis) · `/dort-bagla` · `/xox` · `/tkm` |
@@ -153,7 +154,7 @@ Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da 
 `/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/etkilesim saril/tokat/op/oksa/yumruk/cak/dans/agla` (hareketli GIF'ler) · `/hayvan` (kedi, köpek, tilki, ördek fotoğrafları) · `/fal` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer`
 
 ### 📌 Genel
-`/yardim` (kategori → komut seçmeli menü, komut detay sayfaları) · `/afk` (sebepli; etiketleyenlere bildirir, takma ada [AFK] ekler, yazınca veya seste hareket edince kalkar) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/stat` · `/top` · `/hatirlat`
+`/yardim` (kategori → komut seçmeli menü, komut detay sayfaları) · `/emoji ekle/kopyala/sil/liste/buyut` (dosyadan, linkten veya başka sunucunun emojisini yapıştırarak ekle; mesajdaki tüm emojileri tek seferde kopyala; büyük görseller otomatik küçültülür) · `/afk` (sebepli; etiketleyenlere bildirir, takma ada [AFK] ekler, yazınca veya seste hareket edince kalkar) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/stat` · `/top` · `/hatirlat`
 
 ---
 
