@@ -6,10 +6,10 @@ const { base, replyFail } = require('../../lib/embeds');
 const games = require('../../lib/games');
 const economy = require('../../lib/economy');
 const { pick } = require('../../lib/util');
-const { colors } = require('../../config');
+const { colors, utcOffsetMinutes } = require('../../config');
 const PLAYERS = require('../../data/futbolcular');
 
-const REWARDS = [60, 50, 40, 30, 20, 10]; // açılan ekstra ipucu sayısına göre
+const REWARDS = [60, 45, 30, 20, 10]; // açılan ekstra ipucu sayısına göre
 const WRONG_PER_HINT = 3;
 const HINT_EVERY = 25000;
 const LAST_CHANCE = 30000;
@@ -19,11 +19,17 @@ function masked(name) {
   return name.split(' ').map((word) => [...word].map((ch, i) => (i === 0 || Math.random() < 0.35 ? ch.toLocaleUpperCase('tr') : '＿')).join(' ')).join('   ');
 }
 
-// level 0: başlangıç (uyruk + mevki + ilk kulüp). Sonrası sırayla açılır.
+// "1987 (39 yaşında)" ya da vefat ettiyse "1940 – 2022 (82 yaşında vefat etti)"
+function birth(p) {
+  if (p.d) return `${p.y} – ${p.d} (${p.da ?? p.d - p.y} yaşında vefat etti)`;
+  const year = new Date(Date.now() + utcOffsetMinutes * 60000).getUTCFullYear();
+  return `${p.y} (${year - p.y} yaşında)`;
+}
+
+// level 0: başlangıç (uyruk, mevki, ilk kulüp, doğum yılı + yaş). Sonrası sırayla açılır.
 function hints(p) {
   const words = p.n.split(' ');
   return [
-    { name: '🎂 Doğum yılı', value: String(p.y) },
     { name: '👕 Forma giydiği kulüplerden', value: p.k.length ? p.k.slice(0, 2).join(', ') : 'Tüm kariyerini tek kulüpte geçirdi!' },
     { name: '🏆 Bilgi', value: p.f },
     { name: '🔤 Baş harfler', value: `${words.map((w) => `${w[0].toLocaleUpperCase('tr')}.`).join(' ')} (${words.map((w) => [...w].length).join(' + ')} harf)` },
@@ -41,7 +47,8 @@ function view(state, end) {
       { name: '🏳️ Uyruk', value: p.u, inline: true },
       { name: '🎯 Mevki', value: p.p, inline: true },
       { name: '🏟️ Kariyerine başladığı kulüp', value: p.s, inline: true },
-      ...hints(p).slice(0, end ? 4 : level),
+      { name: '🎂 Doğum yılı', value: birth(p), inline: true },
+      ...hints(p).slice(0, end ? 3 : level),
     );
   if (end) {
     embed.setDescription(end === 'win' ? `🎉 **${state.winner.username}** bildi!` : end === 'pes' ? `🏳️ Pes edildi. Cevap: **${p.n}**` : `⏰ Kimse bilemedi! Cevap: **${p.n}**`);

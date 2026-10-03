@@ -1,6 +1,6 @@
 // Futbolcu tahmin oyunu verisi.
 // n: tam ad, a: kabul edilen cevaplar, c: ülke kodu (flagcdn.com), u: uyruk, p: mevki, s: profesyonel kariyerine başladığı kulüp,
-// y: doğum yılı, k: forma giydiği diğer kulüplerden bazıları (sıralı), f: ipucu olarak verilecek bilgi
+// y: doğum yılı, d: vefat yılı (varsa), da: vefat yaşı (yıl farkı tutmuyorsa), k: forma giydiği diğer kulüplerden bazıları (sıralı), f: ipucu olarak verilecek bilgi
 // Not: "Şu anki takım" bilgisi bilinçli olarak yok; transferlerle eskiyebilir.
 module.exports = [
   // ---------------- Türk futbolcular
@@ -70,7 +70,7 @@ module.exports = [
   { n: 'Luís Figo', a: ['luis figo', 'figo'], c: 'pt', u: 'Portekiz', p: 'Kanat', s: 'Sporting CP', y: 1972, k: ['Barcelona', 'Real Madrid', 'Inter'], f: 'Ezeli rakibe olay transferi yaptı; 2000\'de Ballon d\'Or kazandı.' },
   { n: 'Bruno Fernandes', a: ['bruno fernandes', 'bruno'], c: 'pt', u: 'Portekiz', p: 'Orta saha', s: 'Novara', y: 1994, k: ['Udinese', 'Sampdoria', 'Sporting CP', 'Manchester United'], f: 'Profesyonel kariyerine İtalya\'nın alt liginde başladı.' },
   { n: 'Virgil van Dijk', a: ['virgil van dijk', 'van dijk', 'vvd'], c: 'nl', u: 'Hollanda', p: 'Defans', s: 'Groningen', y: 1991, k: ['Celtic', 'Southampton', 'Liverpool'], f: '2019\'da Ballon d\'Or oylamasında ikinci oldu (bir defans oyuncusu olarak).' },
-  { n: 'Johan Cruyff', a: ['johan cruyff', 'cruyff', 'cruijff'], c: 'nl', u: 'Hollanda', p: 'Forvet', s: 'Ajax', y: 1947, k: ['Barcelona', 'Feyenoord'], f: '"Total futbol"un simgesi; adını taşıyan bir çalım hareketi var.' },
+  { n: 'Johan Cruyff', a: ['johan cruyff', 'cruyff', 'cruijff'], c: 'nl', u: 'Hollanda', p: 'Forvet', s: 'Ajax', y: 1947, d: 2016, k: ['Barcelona', 'Feyenoord'], f: '"Total futbol"un simgesi; adını taşıyan bir çalım hareketi var.' },
   { n: 'Marco van Basten', a: ['marco van basten', 'van basten'], c: 'nl', u: 'Hollanda', p: 'Forvet', s: 'Ajax', y: 1964, k: ['Milan'], f: 'EURO 1988 finalinde imkânsız açıdan vole golü attı.' },
   { n: 'Dennis Bergkamp', a: ['dennis bergkamp', 'bergkamp'], c: 'nl', u: 'Hollanda', p: 'Forvet', s: 'Ajax', y: 1969, k: ['Inter', 'Arsenal'], f: 'Uçak korkusu yüzünden "Uçmayan Hollandalı" diye anıldı.' },
   { n: 'Ruud Gullit', a: ['ruud gullit', 'gullit'], c: 'nl', u: 'Hollanda', p: 'Orta saha', s: 'HFC Haarlem', y: 1962, k: ['Feyenoord', 'PSV', 'Milan', 'Sampdoria', 'Chelsea'], f: '1987\'de Ballon d\'Or kazandı; rasta saçlarıyla ünlü.' },
@@ -85,13 +85,13 @@ module.exports = [
   { n: 'Iker Casillas', a: ['iker casillas', 'casillas'], c: 'es', u: 'İspanya', p: 'Kaleci', s: 'Real Madrid', y: 1981, k: ['Porto'], f: 'Kaptan olarak hem Dünya Kupası hem 2 Avrupa Şampiyonası kaldırdı.' },
   { n: 'Manuel Neuer', a: ['manuel neuer', 'neuer'], c: 'de', u: 'Almanya', p: 'Kaleci', s: 'Schalke 04', y: 1986, k: ['Bayern Münih'], f: '"Libero kaleci" tarzının öncüsü; 2014 Dünya Kupası şampiyonu.' },
   { n: 'Oliver Kahn', a: ['oliver kahn', 'kahn'], c: 'de', u: 'Almanya', p: 'Kaleci', s: 'Karlsruher SC', y: 1969, k: ['Bayern Münih'], f: '2002 Dünya Kupası\'nda turnuvanın en iyi oyuncusu seçilen ilk kaleci.' },
-  { n: 'Franz Beckenbauer', a: ['franz beckenbauer', 'beckenbauer', 'kaiser'], c: 'de', u: 'Almanya', p: 'Defans', s: 'Bayern Münih', y: 1945, k: ['New York Cosmos', 'Hamburg'], f: '"Kaiser" lakaplı; Dünya Kupası\'nı hem oyuncu hem teknik direktör olarak kazandı.' },
-  { n: 'Pelé', a: ['pele', 'edson arantes'], c: 'br', u: 'Brezilya', p: 'Forvet', s: 'Santos', y: 1940, k: ['New York Cosmos'], f: '3 Dünya Kupası kazanan tek futbolcu.' },
-  { n: 'Diego Maradona', a: ['diego maradona', 'maradona'], c: 'ar', u: 'Arjantin', p: 'Orta saha', s: 'Argentinos Juniors', y: 1960, k: ['Boca Juniors', 'Barcelona', 'Napoli', 'Sevilla'], f: '1986\'da İngiltere\'ye "Tanrı\'nın Eli" golünü ve "Yüzyılın Golü"nü attı.' },
+  { n: 'Franz Beckenbauer', a: ['franz beckenbauer', 'beckenbauer', 'kaiser'], c: 'de', u: 'Almanya', p: 'Defans', s: 'Bayern Münih', y: 1945, d: 2024, da: 78, k: ['New York Cosmos', 'Hamburg'], f: '"Kaiser" lakaplı; Dünya Kupası\'nı hem oyuncu hem teknik direktör olarak kazandı.' },
+  { n: 'Pelé', a: ['pele', 'edson arantes'], c: 'br', u: 'Brezilya', p: 'Forvet', s: 'Santos', y: 1940, d: 2022, k: ['New York Cosmos'], f: '3 Dünya Kupası kazanan tek futbolcu.' },
+  { n: 'Diego Maradona', a: ['diego maradona', 'maradona'], c: 'ar', u: 'Arjantin', p: 'Orta saha', s: 'Argentinos Juniors', y: 1960, d: 2020, k: ['Boca Juniors', 'Barcelona', 'Napoli', 'Sevilla'], f: '1986\'da İngiltere\'ye "Tanrı\'nın Eli" golünü ve "Yüzyılın Golü"nü attı.' },
   { n: 'Lautaro Martínez', a: ['lautaro martinez', 'lautaro'], c: 'ar', u: 'Arjantin', p: 'Forvet', s: 'Racing Club', y: 1997, k: ['Inter'], f: '"Boğa" lakaplı; 2024 Copa América\'da gol kralı oldu.' },
   { n: 'Julián Álvarez', a: ['julian alvarez', 'alvarez'], c: 'ar', u: 'Arjantin', p: 'Forvet', s: 'River Plate', y: 2000, k: ['Manchester City', 'Atlético Madrid'], f: '"Örümcek" lakaplı; 2022 Dünya Kupası\'nda 4 gol attı.' },
   { n: 'Cafu', a: ['cafu'], c: 'br', u: 'Brezilya', p: 'Defans', s: 'São Paulo', y: 1970, k: ['Real Zaragoza', 'Palmeiras', 'Roma', 'Milan'], f: 'Üst üste 3 Dünya Kupası finali oynayan tek oyuncu.' },
   { n: 'Romário', a: ['romario'], c: 'br', u: 'Brezilya', p: 'Forvet', s: 'Vasco da Gama', y: 1966, k: ['PSV', 'Barcelona', 'Valencia', 'Flamengo'], f: '1994 Dünya Kupası\'nın en iyi oyuncusu seçildi.' },
-  { n: 'Ferenc Puskás', a: ['ferenc puskas', 'puskas'], c: 'hu', u: 'Macaristan', p: 'Forvet', s: 'Kispest Honvéd', y: 1927, k: ['Real Madrid'], f: 'FIFA\'nın yılın en güzel golü ödülü onun adını taşır.' },
+  { n: 'Ferenc Puskás', a: ['ferenc puskas', 'puskas'], c: 'hu', u: 'Macaristan', p: 'Forvet', s: 'Kispest Honvéd', y: 1927, d: 2006, k: ['Real Madrid'], f: 'FIFA\'nın yılın en güzel golü ödülü onun adını taşır.' },
   { n: 'Son Heung-min', a: ['son heung min', 'son', 'heung min son'], c: 'kr', u: 'Güney Kore', p: 'Forvet', s: 'Hamburg', y: 1992, k: ['Bayer Leverkusen', 'Tottenham'], f: 'Premier Lig gol krallığını paylaşan ilk Asyalı oyuncu (2021-22).' },
 ];
