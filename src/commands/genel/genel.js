@@ -1,7 +1,7 @@
 // Genel bilgi ve yardımcı komutlar.
 const {
   SlashCommandBuilder, InteractionContextType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle,
-  ChannelType, version: djsVersion,
+  ChannelType, PermissionsBitField, version: djsVersion,
 } = require('discord.js');
 const db = require('../../lib/db');
 const { base, replyOk, replyFail, files, urls } = require('../../lib/embeds');
@@ -11,19 +11,57 @@ const { isOwner, ts, formatDuration, parseDuration, truncate } = require('../../
 
 const guildOnly = (b) => b.setContexts(InteractionContextType.Guild);
 
+const OPTION_TYPES = { 3: 'metin', 4: 'tam sayı', 5: 'evet/hayır', 6: 'kullanıcı', 7: 'kanal', 8: 'rol', 9: 'kullanıcı/rol', 10: 'sayı', 11: 'dosya' };
+const PERMISSION_NAMES = {
+  Administrator: 'Yönetici', ManageGuild: 'Sunucuyu Yönet', ManageMessages: 'Mesajları Yönet', ManageChannels: 'Kanalları Yönet',
+  ManageRoles: 'Rolleri Yönet', ManageNicknames: 'Takma Adları Yönet', BanMembers: 'Üyeleri Yasakla', KickMembers: 'Üyeleri At',
+  ModerateMembers: 'Üyelere Zaman Aşımı Uygula',
+};
+const LEADING_EMOJI = /^(\p{Extended_Pictographic}️?(‍\p{Extended_Pictographic}️?)*)\s*/u;
+
+const visibleCategories = (userId) => Object.entries(CATEGORIES).filter(([k]) => k !== 'ozel' || isOwner(userId));
+const commandsIn = (client, cat) => [...client.commands.values()].filter((c) => c.category === cat).sort((a, b) => a.data.name.localeCompare(b.data.name, 'tr'));
+
+// Kategori menüsü + (kategori seçiliyse) komut menüsü. 25'ten fazla komut varsa birden çok menüye bölünür.
+function helpMenus(client, userId, cat = null, selected = null) {
+  const catMenu = new StringSelectMenuBuilder().setCustomId(`yardim:kategori:${userId}`).setPlaceholder('📂 Kategori seç...')
+    .addOptions([
+      { label: 'Ana sayfa', value: 'ana', emoji: '🏠' },
+      ...visibleCategories(userId).map(([k, c]) => ({ label: c.label, value: k, emoji: c.emoji, description: c.description.slice(0, 100), default: k === cat })),
+    ]);
+  const rows = [new ActionRowBuilder().addComponents(catMenu)];
+  if (cat) {
+    const cmds = commandsIn(client, cat);
+    for (let i = 0; i < cmds.length && rows.length < 5; i += 25) {
+      const chunk = cmds.slice(i, i + 25);
+      rows.push(new ActionRowBuilder().addComponents(new StringSelectMenuBuilder()
+        .setCustomId(`yardim:komut:${userId}:${cat}:${i}`)
+        .setPlaceholder(cmds.length > 25 ? `🔎 Komut seç (${i + 1}-${i + chunk.length})...` : '🔎 Komut seç...')
+        .addOptions(chunk.map((c) => {
+          const desc = c.data.description;
+          const emoji = desc.match(LEADING_EMOJI)?.[1];
+          return {
+            label: `${emoji ? `${emoji} ` : ''}/${c.data.name}`.slice(0, 100),
+            value: c.data.name,
+            description: desc.replace(LEADING_EMOJI, '').slice(0, 100) || undefined,
+            default: c.data.name === selected,
+          };
+        }))));
+    }
+  }
+  return rows;
+}
+
 function helpHome(client, userId) {
-  const cats = Object.entries(CATEGORIES).filter(([k]) => k !== 'ozel' || isOwner(userId));
   const counts = {};
   for (const cmd of client.commands.values()) counts[cmd.category] = (counts[cmd.category] || 0) + 1;
   const embed = base()
     .setTitle('🥐 Boyoz Sistem • Yardım')
-    .setDescription('Sunucunun her işine koşan, çıtır çıtır bir bot. Aşağıdaki menüden bir kategori seç.\n​')
+    .setDescription('Sunucunun her işine koşan, çıtır çıtır bir bot.\nAşağıdan bir **kategori** seç, ardından açılan menüden bir **komut** seçerek detaylarını gör.\n​')
     .setThumbnail(urls.logo)
     .setImage(urls.banner)
-    .addFields(cats.map(([k, c]) => ({ name: `${c.emoji} ${c.label} (${counts[k] || 0})`, value: c.description, inline: true })));
-  const menu = new StringSelectMenuBuilder().setCustomId(`yardim:kategori:${userId}`).setPlaceholder('📂 Kategori seç...')
-    .addOptions([{ label: 'Ana sayfa', value: 'ana', emoji: '🏠' }, ...cats.map(([k, c]) => ({ label: c.label, value: k, emoji: c.emoji, description: c.description.slice(0, 100) }))]);
-  return { embeds: [embed], components: [new ActionRowBuilder().addComponents(menu)], files: [files.logo(), files.banner()] };
+    .addFields(visibleCategories(userId).map(([k, c]) => ({ name: `${c.emoji} ${c.label} (${counts[k] || 0})`, value: c.description, inline: true })));
+  return { embeds: [embed], components: helpMenus(client, userId), files: [files.logo(), files.banner()] };
 }
 
 function describeCommand(cmd) {
@@ -31,6 +69,55 @@ function describeCommand(cmd) {
   const subs = (json.options || []).filter((o) => o.type === 1);
   if (!subs.length) return [`**/${json.name}** — ${json.description}`];
   return [`**/${json.name}** — ${json.description}`, ...subs.map((s) => `└ \`/${json.name} ${s.name}\` ${s.description}`)];
+}
+
+function categoryEmbed(client, cat) {
+  const c = CATEGORIES[cat];
+  let text = '';
+  for (const line of commandsIn(client, cat).flatMap(describeCommand)) {
+    if (text.length + line.length > 3900) { text += '\n… ve daha fazlası, aşağıdaki menüden seç.'; break; }
+    text += `${line}\n`;
+  }
+  return base().setTitle(`${c.emoji} ${c.label} Komutları`).setDescription(text).setThumbnail(urls.logo)
+    .setFooter({ text: '🔎 Detay için aşağıdaki menüden bir komut seç' });
+}
+
+// Seçenekleri "• `ad` (tür, zorunlu) açıklama" biçiminde listeler
+function formatOptions(options = []) {
+  return options.map((o) => {
+    let line = `• \`${o.name}\` *(${OPTION_TYPES[o.type] || 'değer'}${o.required ? ', **zorunlu**' : ', isteğe bağlı'})* ${o.description}`;
+    if (o.choices?.length) line += `\n  ↳ Seçimler: ${o.choices.slice(0, 12).map((ch) => `\`${ch.name}\``).join(', ')}${o.choices.length > 12 ? '…' : ''}`;
+    if (o.min_value !== undefined || o.max_value !== undefined) line += `\n  ↳ Aralık: ${o.min_value ?? '…'} – ${o.max_value ?? '…'}`;
+    return line;
+  }).join('\n');
+}
+const usage = (name, options = []) => `\`/${name}${options.map((o) => (o.required ? ` ${o.name}:…` : ` [${o.name}]`)).join('')}\``;
+
+function commandDetail(cmd) {
+  const json = cmd.data.toJSON();
+  const c = CATEGORIES[cmd.category];
+  const embed = base().setTitle(`/${json.name}`).setDescription(json.description).setThumbnail(urls.logo)
+    .setAuthor({ name: `${c.emoji} ${c.label}` });
+
+  const subs = (json.options || []).filter((o) => o.type === 1);
+  if (subs.length) {
+    for (const s of subs.slice(0, 20)) {
+      const opts = formatOptions(s.options);
+      embed.addFields({ name: `▸ /${json.name} ${s.name}`, value: truncate(`${s.description}\n${usage(`${json.name} ${s.name}`, s.options)}${opts ? `\n${opts}` : ''}`, 1024) });
+    }
+  } else {
+    embed.addFields({ name: '📝 Kullanım', value: usage(json.name, json.options) });
+    if (json.options?.length) embed.addFields({ name: '⚙️ Seçenekler', value: truncate(formatOptions(json.options), 1024) });
+  }
+
+  let who = 'Herkes';
+  if (cmd.ownerOnly) who = '👑 Sadece bot yetkilileri';
+  else if (json.default_member_permissions && json.default_member_permissions !== '0') {
+    const names = new PermissionsBitField(BigInt(json.default_member_permissions)).toArray().map((p) => PERMISSION_NAMES[p] || p);
+    who = `🛡️ "${names.join(', ')}" iznine sahip olanlar`;
+  }
+  embed.addFields({ name: '🔐 Kimler kullanabilir?', value: who });
+  return embed.setFooter({ text: '[köşeli parantez] = isteğe bağlı • Başka bir komut seçebilirsin' });
 }
 
 module.exports = [
@@ -45,15 +132,16 @@ module.exports = [
       async kategori(interaction, [ownerId], client) {
         if (interaction.user.id !== ownerId) return replyFail(interaction, 'Bu menü başkasına ait, kendi `/yardim` komutunu kullan.');
         const cat = interaction.values[0];
-        if (cat === 'ana') {
-          const home = helpHome(client, ownerId);
-          return interaction.update({ ...home, attachments: [] });
-        }
+        if (cat === 'ana') return interaction.update({ ...helpHome(client, ownerId), attachments: [] });
         if (cat === 'ozel' && !isOwner(interaction.user.id)) return replyFail(interaction, 'Bu kategori sadece bot yetkililerine açık.');
-        const c = CATEGORIES[cat];
-        const lines = [...client.commands.values()].filter((cmd) => cmd.category === cat).flatMap(describeCommand);
-        const embed = base().setTitle(`${c.emoji} ${c.label} Komutları`).setDescription(lines.join('\n').slice(0, 4000)).setThumbnail(urls.logo);
-        return interaction.update({ embeds: [embed], components: interaction.message.components, files: [files.logo()], attachments: [] });
+        return interaction.update({ embeds: [categoryEmbed(client, cat)], components: helpMenus(client, ownerId, cat), files: [files.logo()], attachments: [] });
+      },
+      async komut(interaction, [ownerId, cat], client) {
+        if (interaction.user.id !== ownerId) return replyFail(interaction, 'Bu menü başkasına ait, kendi `/yardim` komutunu kullan.');
+        const cmd = client.commands.get(interaction.values[0]);
+        if (!cmd) return replyFail(interaction, 'Bu komut artık yok.');
+        if (cmd.ownerOnly && !isOwner(interaction.user.id)) return replyFail(interaction, 'Bu komut sadece bot yetkililerine açık.');
+        return interaction.update({ embeds: [commandDetail(cmd)], components: helpMenus(client, ownerId, cat, cmd.data.name), files: [files.logo()], attachments: [] });
       },
     },
   },
