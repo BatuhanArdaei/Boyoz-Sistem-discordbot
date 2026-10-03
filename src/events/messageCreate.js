@@ -7,6 +7,7 @@ const channelGames = require('../lib/channelgames');
 const afk = require('../lib/afk');
 const stats = require('../lib/stats');
 const community = require('../lib/community');
+const greet = require('../lib/greet');
 const { fillTemplate } = require('../lib/util');
 
 const autoresponseCooldown = new Map();
@@ -35,6 +36,7 @@ module.exports = {
   async execute(message) {
     if (!message.guild || message.author.bot || message.webhookId) return;
     await afk.handleMessage(message);
+    await greet.handle(message);
     stats.onMessage(message);
     community.onMessage(message);
     if (await automod.handle(message)) return;
