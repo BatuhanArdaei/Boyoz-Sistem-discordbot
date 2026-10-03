@@ -64,6 +64,7 @@ Bot açıldıktan sonra Discord'da `/bot-profil hedef: Profil fotoğrafı + bann
 | `/yetkili ekle/cikar/liste` | Özel komut yetkililerini yönetir |
 | `/bot-profil` | Profil fotoğrafı / banner ayarlar |
 | `/sunucular [ayril]` | Sunucuları listeler / sunucudan ayrılır |
+| `/boyoz-yonet ver/al/ayarla/sifirla/toplu-ver/bilgi/herkesi-sifirla` | Boyoz ekonomisine müdahale: puan ver/al, bakiyeyi ayarla, bekleme sürelerini sıfırla, bir role toplu dağıt. Her işlem moderasyon log'una düşer |
 
 > Bu komutlar varsayılan olarak sadece **Yönetici** izni olanlara görünür. Yönetici olmayan bir yetkilinin görmesi için: *Sunucu Ayarları → Entegrasyonlar → Boyoz Sistem* üzerinden izin verin. Görünse bile ID'si tanımlı olmayan kimse kullanamaz.
 
