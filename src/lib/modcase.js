@@ -59,4 +59,13 @@ async function notifyUser(user, guild, type, reason, duration) {
   return user.send({ embeds: [embed] }).then(() => true).catch(() => false);
 }
 
-module.exports = { createCase, caseEmbed, notifyUser, TYPES };
+// Uyarı ekler (vaka numarası uyarı ID'si olarak kullanılır). Kullanıcının toplam uyarı sayısını döner.
+async function addWarning(guild, userId, modId, reason) {
+  const c = await createCase(guild, { type: 'warn', targetId: userId, modId, reason });
+  const g = db.guild(guild.id);
+  (g.warnings[userId] ??= []).push({ id: c.id, modId, reason: reason || null, at: c.at });
+  db.save();
+  return { caseId: c.id, total: g.warnings[userId].length };
+}
+
+module.exports = { createCase, caseEmbed, notifyUser, addWarning, TYPES };

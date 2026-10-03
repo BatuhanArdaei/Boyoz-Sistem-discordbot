@@ -8,7 +8,7 @@ const DEFAULT_BADWORDS = [
   'amk', 'aq', 'amq', 'amına*', 'amina*', 'aminakoyim', 'orospu*', 'piç', 'pic', 'piçlik',
   'siktir*', 'sikerim', 'sikeyim', 'sikik', 'yarrak*', 'yarak*', 'ananı', 'anani', 'ananızı',
   'pezevenk*', 'kahpe*', 'yavşak*', 'yavsak*', 'ibne*', 'oç', 'göt', 'götveren', 'gotveren',
-  'gavat*', 'kaltak*', 'şerefsiz*', 'serefsiz*', 'dalyarak*', 'mal', 'salak', 'gerizekalı', 'gerizekali',
+  'gavat*', 'kaltak*', 'şerefsiz*', 'serefsiz*', 'dalyarak*', 'salak', 'gerizekalı', 'gerizekali',
 ];
 
 const guildDefaults = () => ({
