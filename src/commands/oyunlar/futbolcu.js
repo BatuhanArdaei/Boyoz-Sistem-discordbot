@@ -8,6 +8,13 @@ const economy = require('../../lib/economy');
 const { pick } = require('../../lib/util');
 const { colors, utcOffsetMinutes } = require('../../config');
 const PLAYERS = require('../../data/futbolcular');
+const { LEAGUES } = require('../../data/ligler');
+
+// Etiket tabanlı kategoriler (hepsi / tr / yabanci dışındakiler)
+const TAG_LABELS = {
+  aktif: '🆕 Güncel futbolcular', eski: '⭐ ESKİ YILDIZLAR', karam: '🔥 KARAM TAYFA (2000-2008 Milli Takım)',
+  ...Object.fromEntries(Object.entries(LEAGUES).map(([k, l]) => [k, l.label])),
+};
 
 const REWARDS = [60, 45, 30, 20, 10]; // açılan ekstra ipucu sayısına göre
 const WRONG_PER_HINT = 3;
@@ -41,7 +48,7 @@ function view(state, end) {
   const { p, level } = state;
   const reward = REWARDS[level];
   const embed = base(end === 'win' ? colors.success : end ? colors.error : 0x2ecc71)
-    .setTitle(end ? `⚽ ${p.n}` : `⚽ Bu futbolcu kim?${state.cat === 'karam' ? ' • 🔥 KARAM TAYFA' : state.cat === 'eski' ? ' • ⭐ ESKİ YILDIZLAR' : ''}`)
+    .setTitle(end ? `⚽ ${p.n}` : `⚽ Bu futbolcu kim?${TAG_LABELS[state.cat] ? ` • ${TAG_LABELS[state.cat].replace(/ \(.*\)$/, '')}` : ''}`)
     .setThumbnail(`https://flagcdn.com/w160/${p.c}.png`)
     .addFields(
       { name: '🏳️ Uyruk', value: p.u, inline: true },
@@ -70,7 +77,7 @@ module.exports = {
     .setContexts(InteractionContextType.Guild)
     .addStringOption((o) => o.setName('kategori').setDescription('Hangi futbolcular?').addChoices(
       { name: '🌍 Karışık', value: 'hepsi' }, { name: '🇹🇷 Türk futbolcular', value: 'tr' }, { name: '🌐 Yabancı futbolcular', value: 'yabanci' },
-      { name: '⭐ ESKİ YILDIZLAR', value: 'eski' }, { name: '🔥 KARAM TAYFA (2000-2008 Milli Takım)', value: 'karam' },
+      ...Object.entries(TAG_LABELS).map(([value, name]) => ({ name, value })),
     )),
 
   async execute(interaction) {

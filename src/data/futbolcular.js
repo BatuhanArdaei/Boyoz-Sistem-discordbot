@@ -109,4 +109,15 @@ for (const pl of LIST) {
   pl.t = [...(ESKI.includes(pl.n) ? ['eski'] : []), ...(KARAM.includes(pl.n) ? ['karam'] : [])];
 }
 
-module.exports = [...LIST, ...require('./futbolcular-ek')];
+const { leaguesOf } = require('./ligler');
+
+// 1988'den önce doğduğu halde 2025 itibarıyla hâlâ oynadığı bilinenler ("güncel" kategorisi için)
+const ACTIVE_VETERANS = ['Lionel Messi', 'Cristiano Ronaldo', 'Luka Modrić', 'Edin Džeko', 'Jamie Vardy', 'Fernando Muslera', 'Sergio Ramos', 'Luis Suárez'];
+
+const ALL = [...LIST, ...require('./futbolcular-ek'), ...require('./futbolcular-ek2')];
+for (const pl of ALL) {
+  pl.t = [...new Set([...(pl.t || []), ...leaguesOf(pl)])];
+  if (!pl.t.includes('eski') && (pl.y >= 1988 || ACTIVE_VETERANS.includes(pl.n))) pl.t.push('aktif');
+}
+
+module.exports = ALL;

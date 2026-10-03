@@ -144,7 +144,7 @@ Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da 
 | Tür | Komutlar |
 |---|---|
 | ⚡ Kanal yarışmaları (ilk bilen kazanır) | `/bilgi-yarismasi` (80 soru, butonlu, çok turlu, puan tablosu) · `/bayrak` (84 ülke) · `/emoji-bilmece` · `/matematik` · `/hizli-yaz` (yazı görsel olarak, kopyalanamaz) · `/kelime-coz` · `/sayi-tahmin` (⬆️⬇️ ipuçlu) |
-| ⚽ Futbolcu tahmin | `/futbolcu` (158 futbolcu; kategoriler: karışık, Türk, yabancı, ⭐ ESKİ YILDIZLAR, 🔥 KARAM TAYFA = 2000-2008 Milli Takım kuşağı): bayrak, mevki, ilk kulüp (kesin bilinmiyorsa parladığı kulüp) ve doğum yılı (yaşıyla) ile başlar; her 3 yanlışta ve 25 sn'de bir yeni ipucu (kulüpler, başarı, baş harfler, kısmi isim); İpucu ve Pes Et butonları; az ipucuyla bilen çok boyoz kazanır |
+| ⚽ Futbolcu tahmin | `/futbolcu` (307 futbolcu; 11 kategori: karışık, Türk, yabancı, 🆕 güncel, ⭐ ESKİ YILDIZLAR, 🔥 KARAM TAYFA = 2000-2008 Milli Takım kuşağı, Premier Lig, La Liga, Serie A, Bundesliga, Ligue 1; lig kategorileri oyuncunun kulüplerinden otomatik hesaplanır): bayrak, mevki, ilk kulüp (kesin bilinmiyorsa parladığı kulüp) ve doğum yılı (yaşıyla) ile başlar; her 3 yanlışta ve 25 sn'de bir yeni ipucu (kulüpler, başarı, baş harfler, kısmi isim); İpucu ve Pes Et butonları; az ipucuyla bilen çok boyoz kazanır |
 | 🔤 Kelime | `/kelimebul` (Türkçe Wordle, renkli tahta + klavye görseli) · `/adam-asmaca` (kanalca) |
 | 🎰 Kumarhane (sanal boyoz) | `/blackjack` (kart çek / dur / ikiye katla) · `/rulet` · `/cark` (3 saatte bir ücretsiz şans çarkı) · `/slot` |
 | ⚔️ PvP | `/duello` (saldır, güçlü vuruş, savun, boyoz ye; isteğe bağlı bahis) · `/dort-bagla` · `/xox` · `/tkm` |
