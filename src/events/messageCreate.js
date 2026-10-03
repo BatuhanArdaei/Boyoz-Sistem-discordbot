@@ -1,9 +1,10 @@
-// Gelen mesajlar: automod -> oyun kanalları -> otomatik cevap -> seviye sistemi
+// Gelen mesajlar: AFK -> automod -> oyun kanalları -> otomatik cevap -> seviye sistemi
 const { Events } = require('discord.js');
 const db = require('../lib/db');
 const automod = require('../lib/automod');
 const levels = require('../lib/levels');
 const channelGames = require('../lib/channelgames');
+const afk = require('../lib/afk');
 const { fillTemplate } = require('../lib/util');
 
 const autoresponseCooldown = new Map();
@@ -31,6 +32,7 @@ module.exports = {
   name: Events.MessageCreate,
   async execute(message) {
     if (!message.guild || message.author.bot || message.webhookId) return;
+    await afk.handleMessage(message);
     if (await automod.handle(message)) return;
     // Sayma / kelime zinciri kanallarında otomatik cevap çalışmasın
     if (await channelGames.handle(message)) { await levels.handle(message); return; }

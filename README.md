@@ -131,7 +131,7 @@ Kazananlar **boyoz** kazanır; boyozlar `/boyoz cuzdan` ve `/boyoz siralama`'da 
 `/boyoz` ekonomisi (günlük ödül + seri bonusu, çalış, ye, hediye et, bahis, sıralama, boyoz bilgileri) · `/anket` (butonlu, canlı sonuçlu, süreli) · `/saril` `/tokat` `/op` `/oksa` `/yumruk` `/cak` `/dans` `/agla` (hareketli GIF'ler) · `/hayvan` (kedi, köpek, tilki, ördek fotoğrafları) · `/fal` · `/zar` · `/yazitura` · `/8top` · `/sec` · `/espri` · `/iltifat` · `/ask-olcer`
 
 ### 📌 Genel
-`/yardim` (kategorili menü) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/siralama` · `/hatirlat`
+`/yardim` (kategori → komut seçmeli menü, komut detay sayfaları) · `/afk` (sebepli; etiketleyenlere bildirir, takma ada [AFK] ekler, yazınca veya seste hareket edince kalkar) · `/ping` · `/bot-bilgi` · `/kullanici-bilgi` · `/sunucu-bilgi` · `/avatar` · `/seviye` · `/siralama` · `/hatirlat`
 
 ---
 

@@ -65,6 +65,7 @@ const guildDefaults = () => ({
   },
   social: {},
   voice: { channelId: null },
+  afk: {},
 });
 
 const rootDefaults = () => ({ guilds: {}, reminders: [], meta: { owners: [], presence: null, scheduleCounter: 0 } });
